@@ -71,7 +71,7 @@ class ClassificationEvaluation:
         return metrics.f1_score(y_true, y_pred, average=None)
 
     @staticmethod
-    def auc(y_true: Union[List, np.ndarray, Iterable], y_pred_prob: Union[List, np.ndarray, Iterable]) -> np.ndarray:
+    def auc(y_true: Union[List, np.ndarray, Iterable], y_pred_prob: Union[List, np.ndarray, Iterable]) -> float:
         """
         Calculate the area under the curve given the true and predicted values.
         Note: This method expects a binary classification problem!

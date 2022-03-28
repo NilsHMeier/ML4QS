@@ -18,7 +18,8 @@ from sklearn.model_selection import GridSearchCV
 import pandas as pd
 import numpy as np
 import os
-from typing import Tuple, List
+from pathlib import Path
+from typing import Tuple, List, Union
 
 
 class ClassificationAlgorithms:
@@ -570,8 +571,9 @@ class RegressionAlgorithms:
 
     @staticmethod
     def decision_tree(train_X: pd.DataFrame, train_y: pd.Series, test_X: pd.DataFrame, min_samples_leaf: int = 50,
-                      criterion: str = 'mse', export_tree_path: str = './figures/crowdsignals_ch7_regression/',
-                      export_tree_name: str = 'tree.dot', gridsearch=True, print_model_details: bool = False) \
+                      criterion: str = 'mse', gridsearch=True, print_model_details: bool = False,
+                      export_tree_path: Union[str, Path] = './figures/crowdsignals_ch7_regression/',
+                      export_tree_name: str = 'tree.dot') \
             -> Tuple[List[float], List[float]]:
         """
         Apply a decision tree approach for regression upon the training data with the specified values for the minimum

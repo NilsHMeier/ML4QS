@@ -12,7 +12,7 @@ import numpy as np
 import random
 import copy
 import pandas as pd
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 
 class PrepareDatasetForLearning:
@@ -158,7 +158,7 @@ class PrepareDatasetForLearning:
         return training_set_X, test_set_X, training_set_y, test_set_y
 
     @staticmethod
-    def update_set(source_set: pd.DataFrame, addition: pd.DataFrame) -> pd.DataFrame:
+    def update_set(source_set: pd.DataFrame, addition: Union[pd.DataFrame, pd.Series]) -> pd.DataFrame:
         """
         Append to dataframes and check if the indices are overlapping ((e.g. user 1 and user 2 have the same time
         stamps). In case of overlapping indices create a new unique index.
@@ -210,7 +210,7 @@ class PrepareDatasetForLearning:
         if unknown_users:
             # Shuffle the users
             random.seed(random_state)
-            indices = range(0, len(datasets))
+            indices = list(range(0, len(datasets)))
             random.shuffle(indices)
             training_len = int(training_frac * len(datasets))
 

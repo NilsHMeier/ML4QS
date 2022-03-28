@@ -103,7 +103,7 @@ def main():
         comp_numbers = np.arange(1, len(pc_values) + 1)
         DataViz.plot_xy(x=[comp_numbers, comp_numbers], y=[pc_values, cumulated_variance],
                         xlabel='principal component number', ylabel='explained variance',
-                        ylim=[0, 1], line_styles=['b-', 'r-'], names=['Variance', 'Cumulated variance'])
+                        ylim=(0, 1), line_styles=['b-', 'r-'], names=['Variance', 'Cumulated variance'])
 
         # Select 7 as the best number of PC's as this explains most of the variance
         n_pcs = 7

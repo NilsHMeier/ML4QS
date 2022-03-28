@@ -28,7 +28,7 @@ class DistributionBasedOutlierDetection:
     """
 
     @staticmethod
-    def chauvenet(data_table: pd.DataFrame, col: str) -> pd.DataFrame:
+    def chauvenet(data_table: pd.DataFrame, col: str, C: float) -> pd.DataFrame:
         """
         Find outliers in the specified column of datatable based on the Chauvenet-Criterion (assuming the data is
         normally distributed and calculating the probability that a data point belongs to the distribution) and add a
@@ -38,6 +38,7 @@ class DistributionBasedOutlierDetection:
 
         :param data_table: DataFrame with data the outlier detection will be applied on.
         :param col: Name of the column to process.
+        :param C: Parameter C for outlier detection.
         :return: Original DataFrame with a new binary column added.
         """
 
@@ -47,10 +48,8 @@ class DistributionBasedOutlierDetection:
         N = len(data_table.index)
         criterion = 1.0 / (C * N)
 
-
         # Consider the deviation for the data points
         deviation = abs(data_table[col] - mean) / std
-
 
         # Express the upper and lower bounds.
         low = -deviation/math.sqrt(C)
@@ -105,7 +104,7 @@ class DistanceBasedOutlierDetection:
     @staticmethod
     def create_distance_table(data_table: pd.DataFrame, cols: List[str], d_function: str) -> pd.DataFrame:
         """
-        Create distance table between rows in the data table. Only cols are considered and the specified  distance
+        Create distance table between rows in the data table. Only cols are considered and the specified distance
         function is used to compute the distance .
 
         :param data_table: DataFrame to calculate distance matrix for.
@@ -129,7 +128,7 @@ class DistanceBasedOutlierDetection:
         :param data_table: Data to detect outliers in.
         :param cols: Columns to use for calculating distance between rows.
         :param d_function: Distance function to use for calculating the distance between points.
-        :param d_min: Minimum distance to count points as neigbours.
+        :param d_min: Minimum distance to count points as neighbours.
         :param f_min: Proportion of all data points from which a point is counted as an outlier.
         :return: Original data with new binary column names 'simple_dist_outlier'.
         """
@@ -144,18 +143,17 @@ class DistanceBasedOutlierDetection:
         mask = []
 
         # Pass the rows in our table.
-        for i in range(0, len(new_data_table.index)):
+        for i in range(0, len(norm_data_table.index)):
             # Check what faction of neighbors are beyond dmin.
             frac = (float(sum([1 for col_val in self.distances.iloc[i, :].tolist(
-            ) if col_val > dmin]))/len(new_data_table.index))
+            ) if col_val > d_min]))/len(norm_data_table.index))
             # Mark as an outlier if beyond the minimum frequency.
-            mask.append(frac > fmin)
+            mask.append(frac > f_min)
         if data_table.get('simple_dist_outlier') is None:
-            data_mask = pd.DataFrame(mask, index=new_data_table.index, columns=[
-                                     'simple_dist_outlier'])
+            data_mask = pd.DataFrame(mask, index=norm_data_table.index, columns=['simple_dist_outlier'])
             data_table = pd.concat([data_table, data_mask], axis=1)
         else:
-            data_table['simple_dist_outlier'] = pd.Series(mask, index=new_data_table.index)
+            data_table['simple_dist_outlier'] = pd.Series(mask, index=norm_data_table.index)
         del self.distances
 
         return data_table
@@ -186,11 +184,10 @@ class DistanceBasedOutlierDetection:
             outlier_factor.append(self.local_outlier_factor_instance(i, k))
 
         if data_table.get('lof') is None:
-            data_outlier_probs = pd.DataFrame(
-                outlier_factor, index=new_data_table.index, columns=['lof'])
+            data_outlier_probs = pd.DataFrame(outlier_factor, index=norm_data_table.index, columns=['lof'])
             data_table = pd.concat([data_table, data_outlier_probs], axis=1)
         else:
-            data_table['lof'] = pd.Series(outlier_factor, index=new_data_table.index)
+            data_table['lof'] = pd.Series(outlier_factor, index=norm_data_table.index)
 
         del self.distances
         return data_table

@@ -1,13 +1,14 @@
 import itertools
 import sys
 from pathlib import Path
-from typing import List, Tuple
+from typing import List, Tuple, Union
 import matplotlib.dates as md
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from scipy.cluster.hierarchy import dendrogram
 import matplotlib as mpl
+
 mpl.use('tkagg')
 
 
@@ -24,8 +25,7 @@ class VisualizeDataset:
         self.figures_dir = Path('figures') / subdir
         self.figures_dir.mkdir(exist_ok=True, parents=True)
 
-    def save(self, plot_obj, formats=('png', 'eps', 'pdf')): # 'svg'
-
+    def save(self, plot_obj, formats=('png', 'eps', 'pdf')):  # 'svg'
 
         fig_name = f'figure_{self.plot_number}'
         for f in formats:
@@ -34,7 +34,8 @@ class VisualizeDataset:
             print(f'Figure saved to {save_path}')
         self.plot_number += 1
 
-    def plot_dataset(self, data_table: pd.DataFrame, columns: List[str], match: str = 'like', display: str = 'line'):
+    def plot_dataset(self, data_table: pd.DataFrame, columns: List[str], match: List[str] = 'like',
+                     display: List[str] = 'line'):
         """
         Plot the dataset, here columns can specify a specific attribute, but also a generic name that occurs
         among multiple attributes (e.g. label which occurs as labelWalking, etc). In such a case they are plotted
@@ -102,9 +103,10 @@ class VisualizeDataset:
         self.save(plt)
         plt.show()
 
-    def plot_xy(self, x: List[float], y: List[float], method: str = 'plot', xlabel: str = None, ylabel: str = None,
-                xlim: Tuple[int, int] = None, ylim: Tuple[int, int] = None, names: List[str] = None,
-                line_styles: List[str] = None, title: str = None):
+    def plot_xy(self, x: Union[List[float], List[np.ndarray]], y: Union[List[float], List[np.ndarray]],
+                method: str = 'plot', xlabel: str = None, ylabel: str = None,
+                xlim: Union[Tuple[int, int], List[int]] = None, ylim: Union[Tuple[int, int], List[float]] = None,
+                names: List[str] = None, line_styles: List[str] = None, title: str = None):
         for input_values in x, y:
             if not hasattr(input_values[0], '__iter__'):
                 raise TypeError('x/y should be given as a list of lists of coordinates')
@@ -315,7 +317,7 @@ class VisualizeDataset:
         plt.xlabel('time points')
         plt.ylabel('distance')
         times = dataset.index.strftime('%H:%M:%S')
-        dendrogram(linkage, truncate_mode='lastp', p=16, show_leaf_counts=True, leaf_rotation=45., leaf_font_size=8.,
+        dendrogram(linkage, truncate_mode='lastp', p=16, show_leaf_counts=True, leaf_rotation=45., leaf_font_size=8,
                    show_contracted=True, labels=times)
         self.save(plt)
         plt.show()
@@ -328,7 +330,7 @@ class VisualizeDataset:
         """
 
         # Select the colormap
-        cmap = plt.cm.Blues
+        cmap = plt.cm.get_cmap('Blues')
         plt.imshow(confusion_matrix, interpolation='nearest', cmap=cmap)
         plt.title('confusion matrix')
         plt.colorbar()

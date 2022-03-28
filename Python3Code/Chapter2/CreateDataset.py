@@ -24,7 +24,7 @@ class CreateDataset:
 
     def create_timestamps(self, start_time: datetime, end_time: datetime) -> pd.DatetimeIndex:
         """
-        Create DatetimeIndex between start end end time with steps of instance granularity.
+        Create DatetimeIndex between start and end time with steps of instance granularity.
 
         :param start_time: Time to start the timestamps in datetime format.
         :param end_time: Time to end the timestamps in datetime format.
