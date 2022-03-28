@@ -25,7 +25,7 @@ class VisualizeDataset:
         self.figures_dir = Path('figures') / subdir
         self.figures_dir.mkdir(exist_ok=True, parents=True)
 
-    def save(self, plot_obj, formats=('png', 'eps', 'pdf')):  # 'svg'
+    def save(self, plot_obj, formats=('png', 'pdf')):  # 'svg'
 
         fig_name = f'figure_{self.plot_number}'
         for f in formats:
