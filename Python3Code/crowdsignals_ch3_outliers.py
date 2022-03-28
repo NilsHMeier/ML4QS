@@ -18,8 +18,8 @@ import argparse
 
 # Set up file names and locations
 DATA_PATH = Path('./intermediate_datafiles/')
-DATASET_FILENAME = sys.argv[1] if len(sys.argv) > 1 else 'chapter2_result.csv'
-RESULT_FILENAME = sys.argv[2] if len(sys.argv) > 2 else 'chapter3_result_outliers.csv'
+DATASET_FILENAME = 'chapter2_result.csv'
+RESULT_FILENAME = 'chapter3_result_outliers.csv'
 
 
 def print_flags():

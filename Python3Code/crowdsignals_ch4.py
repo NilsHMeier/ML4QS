@@ -19,8 +19,8 @@ from Chapter4.FrequencyAbstraction import FourierTransformation
 
 # Set up the file names and locations
 DATA_PATH = Path('./intermediate_datafiles/')
-DATASET_FNAME = sys.argv[1] if len(sys.argv) > 1 else 'chapter3_result_final.csv'
-RESULT_FNAME = sys.argv[2] if len(sys.argv) > 2 else 'chapter4_result.csv'
+DATASET_FNAME = 'chapter3_result_final.csv'
+RESULT_FNAME = 'chapter4_result.csv'
 
 
 def print_flags():
