@@ -138,12 +138,12 @@ class DistanceBasedOutlierDetection:
         # Normalize the dataset first
         norm_data_table = util.normalize_dataset(data_table.dropna(axis=0, subset=cols), cols)
         # Create the distance table first between all instances
-        distances = self.create_distance_table(norm_data_table, cols, d_function)
+        self.distances = self.create_distance_table(norm_data_table, cols, d_function)
 
         mask = []
 
         # Pass the rows in our table.
-        for i in range(0, len(norm_data_table.index)):
+        for i in tqdm(range(0, len(norm_data_table.index))):
             # Check what faction of neighbors are beyond dmin.
             frac = (float(sum([1 for col_val in self.distances.iloc[i, :].tolist(
             ) if col_val > d_min]))/len(norm_data_table.index))
