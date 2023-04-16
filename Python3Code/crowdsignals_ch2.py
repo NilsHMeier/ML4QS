@@ -32,6 +32,8 @@ def main():
     # Create object to visualize the data and save figures
     DataViz = VisualizeDataset(module_path=__file__)
 
+    print('Please wait, this will take a while to run!')
+
     datasets = []
     for milliseconds_per_instance in GRANULARITIES:
         print(
@@ -112,3 +114,6 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+    # Lastly, print a statement to know the code went through
+    print('The code has run through successfully!')
