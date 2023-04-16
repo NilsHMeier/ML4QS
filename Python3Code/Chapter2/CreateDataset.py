@@ -46,7 +46,7 @@ class CreateDataset:
         if prefix != '':
             cols = [f'{prefix}{col}' for col in cols]
         timestamps = self.create_timestamps(start_time, end_time)
-        self.data_table = pd.DataFrame(index=timestamps, columns=cols)
+        self.data_table = pd.DataFrame(index=timestamps, columns=cols, dtype=np.float32)
 
     def add_numerical_dataset(self, file: str, timestamp_col: str, value_cols: list, aggregation: str = 'avg',
                               prefix: str = ''):
